@@ -18,7 +18,7 @@ def init_browser():
 def scrape():
     browser = init_browser()
 
-    news_title, news_paragraph = mars_news(browser)
+    # news_title, news_p = mars_news(browser)
 
     # Run all scraping functions and store results in a dictionary
     data = {
@@ -29,7 +29,7 @@ def scrape():
         "hemispheres": hemispheres(browser)
     }
 
-    Stop webdriver and return data
+    #Stop webdriver and return data
     browser.quit()
     return data
 
