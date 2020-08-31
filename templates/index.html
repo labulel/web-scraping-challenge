@@ -21,13 +21,40 @@
     <div class="row" id="mars">
       <div class="col-md-12">
         <h4 class="heading">{{data.news_title}}</h4>
-        <small>{{data.news_p}}</small>
+        <small>{{data.news_paragraph}}</small>
       </div>
     </div>
 
-    <!-- Featured Image  -->
-    
+    <!-- Facts Table  -->
+    <div class="row" id="mars">
+        <div class="col-md-8">
+          <h4 class="heading">Featured Mars Image</h4>
+          <img class = "img-responsive" src = "{{data.featured_image|default('static/images/error.png', true)}}"/>
+        </div>
+        <div class="col-md-4">
+            <h4 class="heading">Mars Facts</h4>
+            {{data.facts|safe}}
+        </div>
+    </div>
 
+    <!-- Mars Hemisphere -->
+    <div class="row" id="mars">
+        <div class="col-md-12">
+          <h4 class="heading">Mars Hemishpheres</h4>
+        </div>
+        {% for x in data.hemispheres %}
+        <div class = "col-md-6">
+            <div class = "thumbnail">
+            <img src="{{x.img_url|default('static/images/error.png', true)}}" alt="...">
+            <div class = "caption">
+            <h3>
+                {{x.title}}
+            </h3>
+        </div>
+            </div>
+            </div>
+        {% endfor %}
+    </div>
 
   </div>
 </body>

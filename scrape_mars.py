@@ -23,10 +23,10 @@ def scrape():
     # Run all scraping functions and store results in a dictionary
     data = {
         "news_title": news_title,
-        "news_paragraph": news_p,
-        "featured_image": featured_image(browser),
+        "news_paragraph": news_paragraph,
+        "featured_image": featured_image(),
         "facts": mars_facts(),
-        "hemispheres": hemispheres(browser)
+        "hemispheres": hemispheres()
     }
 
     #Stop webdriver and return data
@@ -37,22 +37,19 @@ def scrape():
 #Get Mars News
 def mars_news():
     browser = init_browser()
-
     url = "https://mars.nasa.gov/news/"
     browser.visit(url)
+    browser.is_element_present_by_css('ul.item_list li.slide', wait_time=1)
 
     # Convert the browser html to a soup object and then extract title and teaser paragraph
     html = browser.html
     news_soup = soup(html, 'html.parser')
     slide_elem = news_soup.select_one('ul.item_list li.slide')
-    news_title = slide_elem.find('div',class_ = "content_title").a.text
-    news_p = slide_elem.find('div',class_ = "article_teaser_body").text
+    news_title = slide_elem.find('div',class_ = "content_title").get_text()
+    news_p = slide_elem.find('div',class_ = "article_teaser_body").get_text()
 
     #Add news info to data dictionary
-    data["news_title"] = news_title
-    data["news_paragraph"] = news_p
-
-    return data
+    return news_title, news_p
 
     browser.quit()
 
@@ -62,6 +59,7 @@ def featured_image():
     browser = init_browser()
     url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(url)
+    browser.is_element_present_by_id('full_image', wait_time=1)
 
     #Visit page by Splinter
     browser.click_link_by_id('full_image')
@@ -74,11 +72,10 @@ def featured_image():
         featured_image_url = x["src"]
     
     #Add featured image url to data dictionary
-    data["featured_image"] = featured_image_url
-
     browser.quit()
+    return featured_image_url
 
-    return data
+    
 
 
 # Get Mars Facts
@@ -95,9 +92,8 @@ def mars_facts():
     html_table = df.to_html()
 
     #Add table to data dictionary
-    data["facts"] = html_table
-
-    return data
+    browser.quit()
+    return html_table
 
 
 # Mars Hemishperes
@@ -105,8 +101,6 @@ def hemispheres():
     browser = init_browser()
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(url)
-
-
 
     #Use Splinter to pull hemisphere image url and title
     links = browser.links.find_by_partial_text('Hemisphere')
@@ -130,11 +124,8 @@ def hemispheres():
         browser.back()
         
     #add Hemisphere title and image url to data dictionary
-    data["hemisphere_image_urls"] = hemisphere_image_urls
-
     browser.quit()
-
-    return data
+    return hemisphere_image_urls
 
 
 
