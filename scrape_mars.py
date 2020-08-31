@@ -13,7 +13,7 @@ import pandas as pd
 def init_browser():
     # Initiate driver for deployment
     executable_path = {'executable_path': 'C:\\bin\\chromedriver.exe'}
-    return Browser('chrome', **executable_path, headless = False)
+    return Browser('chrome', **executable_path, headless = True)
 
 def scrape():
     browser = init_browser()
@@ -106,10 +106,12 @@ def hemispheres():
     links = browser.links.find_by_partial_text('Hemisphere')
     
     #Create a dictionary to hold title and image urls
-    dic = {}
+
     hemisphere_image_urls = []
 
     for i in range(len(links)):
+        dic = {}
+        
         #Find the elements on each iteration
         browser.find_by_css("a.product-item h3")[i].click()
 
